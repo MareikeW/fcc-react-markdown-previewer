@@ -1,17 +1,25 @@
-import React, { useState } from "react";
-import ReactMarkdown from "react-markdown";
-import gfm from "remark-gfm";
-import "./App.css";
+import React, { useEffect, useState } from "react";
+
+import Heading from "./components/Heading";
+import Editor from "./components/Editor";
+import Previewer from "./components/Previewer";
+
+import initialMarkdown from "./initial-markdown.md";
 
 const App = () => {
-  const [text, setText] = useState();
-  
+  const [input, setInput] = useState();
 
+  useEffect(() => {
+    fetch(initialMarkdown)
+    .then((response) => response.text())
+    .then((text) => setInput(text));
+  }, []);
+  
   return (
     <div className="App">
-      <h1 className="heading">React Markdown Previewer</h1>
-      <textarea value={text} onChange={event => setText(event.target.value)} id="preview" autoFocus />
-      <ReactMarkdown plugins={[gfm]} children={text} />
+      <Heading />
+      <Editor input={input} setInput={setInput} />
+      <Previewer input={input} />  
     </div>
   );
 }
